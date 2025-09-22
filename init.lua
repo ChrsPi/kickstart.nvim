@@ -659,11 +659,37 @@ require('lazy').setup({
           settings = {
             basedpyright = {
               analysis = {
-                typeCheckingMode = 'standard',
+                typeCheckingMode = 'basic',
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
+                diagnosticMode = 'openFilesOnly',
+                -- Ensure standard library access
+                autoImportCompletions = true,
+                indexing = true,
+                packageIndexDepths = {
+                  {
+                    name = '',
+                    depth = 4,
+                    includeAllSymbols = true,
+                  },
+                },
+                diagnosticSeverityOverrides = {
+                  reportAny = false,
+                  reportMissingTypeArgument = false,
+                  reportMissingTypeStubs = false,
+                  reportUnknownArgumentType = false,
+                  reportUnknownMemberType = false,
+                  reportUnknownParameterType = false,
+                  reportUnknownVariableType = false,
+                  reportUnusedCallResult = false,
+                },
+                -- Enable comprehensive code actions
+                completeFunctionParens = true,
               },
-              disableOrganizeImports = true, -- Use ruff for import organization
+              -- Enable organize imports (can be toggled) -  use ruff for this
+              disableOrganizeImports = true,
+              -- Python interpreter and environment
+              pythonPath = vim.fn.exepath 'python3' or vim.fn.exepath 'python',
             },
           },
         },
@@ -678,7 +704,7 @@ require('lazy').setup({
               -- Configure Ruff for optimal Python development
               lineLength = 120, -- Standard Python line length
               args = {
-                '--select=E,W,F,I,UP,B,SIM,C90', -- Enable comprehensive rule sets
+                -- '--select=E,W,F,I,UP,B,SIM,C90', -- Enable comprehensive rule sets
                 '--ignore=E501', -- Ignore line too long (handled by formatter)
               },
             },
