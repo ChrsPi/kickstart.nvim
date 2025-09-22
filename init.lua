@@ -655,7 +655,18 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = 'standard',
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+              disableOrganizeImports = true, -- Use ruff for import organization
+            },
+          },
+        },
         rust_analyzer = {},
         -- Configure `ruff`.
         -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff
@@ -664,8 +675,12 @@ require('lazy').setup({
           on_attach = on_attach,
           init_options = {
             settings = {
-              -- Any extra CLI arguments for `ruff` go here.
-              args = {},
+              -- Configure Ruff for optimal Python development
+              lineLength = 120, -- Standard Python line length
+              args = {
+                '--select=E,W,F,I,UP,B,SIM,C90', -- Enable comprehensive rule sets
+                '--ignore=E501', -- Ignore line too long (handled by formatter)
+              },
             },
           },
         },
